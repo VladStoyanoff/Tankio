@@ -5,15 +5,14 @@ using Mirror;
 
 public class NetworkManagerTankio : NetworkManager
 {
-    public override void OnClientConnect()
-    {
-        base.OnClientConnect();
-        Debug.Log("Connected");
-    }
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         base.OnServerAddPlayer(conn);
-        Debug.Log("LOL" + numPlayers);
+
+        NetworkPlayerTankio player = conn.identity.GetComponent<NetworkPlayerTankio>();
+        player.SetDisplayName($"Player {numPlayers}");
+        Color displayColor = new Color(Random.value, Random.value, Random.value);
+        player.SetRandomColor(displayColor);
     }
 }
