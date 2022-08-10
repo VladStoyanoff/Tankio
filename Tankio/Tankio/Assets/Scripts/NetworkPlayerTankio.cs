@@ -32,6 +32,7 @@ public class NetworkPlayerTankio : NetworkBehaviour
     [Command]
     void CmdSetDisplayName(string newDisplayName)
     {
+        if (newDisplayName.Length > 10) return;
         RpcLogNewName(newDisplayName);
         SetDisplayName(newDisplayName);
     }
