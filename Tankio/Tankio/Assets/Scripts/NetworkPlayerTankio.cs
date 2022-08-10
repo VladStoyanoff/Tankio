@@ -2,11 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using TMPro;
 
 public class NetworkPlayerTankio : NetworkBehaviour
 {
-    [SyncVar][SerializeField] string displayName = "Missing Name";
-    [SyncVar] Color color = Color.black;
+    [SerializeField] TMP_Text displayNameText = null;
+    [SerializeField] Renderer displayColorRenderer = null;
+
+    [SyncVar(hook = nameof(HandleDisplayNameUpdated))]
+    [SerializeField] string displayName = "Missing Name";
+     
+    [SyncVar(hook = nameof(HandleDisplayColorUpdated))] 
+    Color displayColor = Color.black;
+
+#region Server
 
     [Server]
     public void SetDisplayName(string newDisplayName)
@@ -15,8 +24,43 @@ public class NetworkPlayerTankio : NetworkBehaviour
     }
 
     [Server]
-    public void SetRandomColor(Color newColor)
+    public void SetRandomColor(Color newDisplayColor)
     {
-        color = newColor;
+        displayColor = newDisplayColor;
     }
+
+    [Command]
+    void CmdSetDisplayName(string newDisplayName)
+    {
+        RpcLogNewName(newDisplayName);
+        SetDisplayName(newDisplayName);
+    }
+
+#endregion
+
+#region Client
+
+    void HandleDisplayColorUpdated(Color oldColor, Color newDisplayColor)
+    {
+        displayColorRenderer.material.SetColor("_BaseColor", newDisplayColor);
+    }
+
+    void HandleDisplayNameUpdated(string oldName, string newDisplayName)
+    {
+        displayNameText.text = newDisplayName;
+    }
+
+    [ContextMenu("Set My Name")]
+    void SetMyName()
+    {
+        CmdSetDisplayName("NewNAme");
+    }
+
+    [ClientRpc]
+    void RpcLogNewName(string newDisplayName)
+    {
+        Debug.Log(newDisplayName);
+    }
+
+    #endregion
 }
