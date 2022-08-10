@@ -5,14 +5,12 @@ using Mirror;
 
 public class NetworkManagerTankio : NetworkManager
 {
+    [SerializeField] GameObject unitSpawnerPrefab;
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         base.OnServerAddPlayer(conn);
-
-        NetworkPlayerTankio player = conn.identity.GetComponent<NetworkPlayerTankio>();
-        player.SetDisplayName($"Player {numPlayers}");
-        Color displayColor = new Color(Random.value, Random.value, Random.value);
-        player.SetRandomColor(displayColor);
+        GameObject unitSpawnerInstance = Instantiate(unitSpawnerPrefab, conn.identity.transform.position, conn.identity.transform.rotation);
+        NetworkServer.Spawn(unitSpawnerInstance, conn);
     }
 }
