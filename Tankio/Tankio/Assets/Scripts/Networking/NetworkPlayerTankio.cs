@@ -65,7 +65,7 @@ public class NetworkPlayerTankio : NetworkBehaviour
         myUnits.Add(unit);
     }
 
-
-
     #endregion
+    public List<Unit> GetMyUnits() => myUnits;
 }
+

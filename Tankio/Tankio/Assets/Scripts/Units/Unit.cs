@@ -8,6 +8,7 @@ using Mirror;
 public class Unit : NetworkBehaviour
 {
     [SerializeField] UnitMovement unitMovement;
+    [SerializeField] Targeter targeter;
     [SerializeField] UnityEvent onSelected;
     [SerializeField] UnityEvent onDeselected;
 
@@ -61,4 +62,5 @@ public class Unit : NetworkBehaviour
     #endregion
 
     public UnitMovement GetUnitMovement() => unitMovement;
+    public Targeter GetTargeter() => targeter;
 }
