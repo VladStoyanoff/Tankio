@@ -8,7 +8,7 @@ public class UnitSelection : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
 
-    List<Unit> selectedUnits = new List<Unit>();
+    public List<Unit> SelectedUnits { get; } = new List<Unit>();
 
     void Update()
     {
@@ -25,12 +25,12 @@ public class UnitSelection : MonoBehaviour
 
     void DeselectAnySelectedUnits()
     {
-        foreach (Unit selectedUnit in selectedUnits)
+        foreach (Unit selectedUnit in SelectedUnits)
         {
             selectedUnit.Deselect();
         }
 
-        selectedUnits.Clear();
+        SelectedUnits.Clear();
     }
 
     void SelectUnits()
@@ -41,9 +41,9 @@ public class UnitSelection : MonoBehaviour
         if (!hit.collider.TryGetComponent<Unit>(out Unit unit))                   return;
         if (!unit.hasAuthority)                                                   return;
 
-        selectedUnits.Add(unit);
+        SelectedUnits.Add(unit);
 
-        foreach(Unit selectedUnit in selectedUnits)
+        foreach(Unit selectedUnit in SelectedUnits)
         {
             selectedUnit.Select();
         }

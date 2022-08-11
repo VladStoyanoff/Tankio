@@ -1,67 +1,71 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Mirror;
 using TMPro;
 
 public class NetworkPlayerTankio : NetworkBehaviour
 {
-    [SerializeField] TMP_Text displayNameText = null;
-    [SerializeField] Renderer displayColorRenderer = null;
+    List<Unit> myUnits = new List<Unit>();
 
-    [SyncVar(hook = nameof(HandleDisplayNameUpdated))]
-    [SerializeField] string displayName = "Missing Name";
-     
-    [SyncVar(hook = nameof(HandleDisplayColorUpdated))] 
-    Color displayColor = Color.black;
-
-#region Server
-
-    [Server]
-    public void SetDisplayName(string newDisplayName)
+    public override void OnStartServer()
     {
-        displayName = newDisplayName;
+        Unit.ServerOnUnitSpawned += Unit_ServerHandleUnitSpawned;
+        Unit.ServerOnUnitDespawned += Unit_ServerHandleUnitDespawned;
     }
 
-    [Server]
-    public void SetRandomColor(Color newDisplayColor)
+    public override void OnStopServer()
     {
-        displayColor = newDisplayColor;
+        Unit.ServerOnUnitSpawned -= Unit_ServerHandleUnitSpawned;
+        Unit.ServerOnUnitDespawned -= Unit_ServerHandleUnitDespawned;
     }
 
-    [Command]
-    void CmdSetDisplayName(string newDisplayName)
+    #region Server
+    void Unit_ServerHandleUnitSpawned(Unit unit)
     {
-        if (newDisplayName.Length > 10) return;
-        RpcLogNewName(newDisplayName);
-        SetDisplayName(newDisplayName);
+        if (unit.connectionToClient.connectionId != connectionToClient.connectionId) return;
+
+        myUnits.Add(unit);
     }
 
-#endregion
-
-#region Client
-
-    void HandleDisplayColorUpdated(Color oldColor, Color newDisplayColor)
+    void Unit_ServerHandleUnitDespawned(Unit unit)
     {
-        displayColorRenderer.material.SetColor("_BaseColor", newDisplayColor);
+        if (unit.connectionToClient.connectionId != connectionToClient.connectionId) return;
+
+        myUnits.Remove(unit);
+    }
+    #endregion
+
+    #region Client
+
+    public override void OnStartClient()
+    {
+        if (!isClientOnly) return;
+        Unit.AuthorityOnUnitSpawned += Unit_AuthorityHandleUnitSpawned;
+        Unit.AuthorityOnUnitDespawned += Unit_AuthorityHandleUnitDespawned;
     }
 
-    void HandleDisplayNameUpdated(string oldName, string newDisplayName)
+    public override void OnStopClient()
     {
-        displayNameText.text = newDisplayName;
+        if (!isClientOnly) return;
+        Unit.AuthorityOnUnitSpawned -= Unit_AuthorityHandleUnitSpawned;
+        Unit.AuthorityOnUnitDespawned -= Unit_AuthorityHandleUnitDespawned;
     }
 
-    [ContextMenu("Set My Name")]
-    void SetMyName()
+    void Unit_AuthorityHandleUnitSpawned(Unit unit)
     {
-        CmdSetDisplayName("NewNAme");
+        if (!hasAuthority) return;
+        myUnits.Remove(unit);
     }
 
-    [ClientRpc]
-    void RpcLogNewName(string newDisplayName)
+    void Unit_AuthorityHandleUnitDespawned(Unit unit)
     {
-        Debug.Log(newDisplayName);
+        if (!hasAuthority) return;
+        myUnits.Add(unit);
     }
+
+
 
     #endregion
 }
