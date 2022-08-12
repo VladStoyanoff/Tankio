@@ -12,6 +12,16 @@ public class UnitMovement : NetworkBehaviour
 
     #region Server
 
+    public override void OnStartServer()
+    {
+        GameOverHandler.ServerOnGameOver += GameOverHandler_ServerOnGameOver;
+    }
+
+    public override void OnStopServer()
+    {
+        GameOverHandler.ServerOnGameOver -= GameOverHandler_ServerOnGameOver;
+    }
+
     [ServerCallback]
     void Update()
     {
@@ -42,6 +52,11 @@ public class UnitMovement : NetworkBehaviour
         if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) return;
 
         agent.SetDestination(hit.position);
+    }
+
+    void GameOverHandler_ServerOnGameOver()
+    {
+        agent.ResetPath();
     }
 
     #endregion

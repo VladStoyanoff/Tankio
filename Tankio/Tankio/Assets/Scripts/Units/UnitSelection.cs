@@ -18,6 +18,7 @@ public class UnitSelection : MonoBehaviour
     void Start()
     {
         Unit.AuthorityOnUnitDespawned += Unit_AuthorityOnUnitDespawned;
+        GameOverHandler.ClientOnGameOver += GameOverHandler_ClientOnGameOver;
     }
 
     void OnDestroy()
@@ -118,5 +119,10 @@ public class UnitSelection : MonoBehaviour
     void Unit_AuthorityOnUnitDespawned(Unit unit)
     {
         SelectedUnits.Remove(unit);
+    }
+
+    void GameOverHandler_ClientOnGameOver(string winnerName)
+    {
+        enabled = false;
     }
 }

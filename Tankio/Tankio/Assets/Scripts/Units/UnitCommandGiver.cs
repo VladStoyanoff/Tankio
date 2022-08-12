@@ -8,6 +8,11 @@ public class UnitCommandGiver : MonoBehaviour
     [SerializeField] UnitSelection unitSelection;
     [SerializeField] LayerMask layerMask;
 
+    void Start()
+    {
+        GameOverHandler.ClientOnGameOver += GameOverHandler_ClientOnGameOver;
+    }
+
     void Update()
     {
         if (!Mouse.current.rightButton.wasPressedThisFrame) return;
@@ -29,6 +34,11 @@ public class UnitCommandGiver : MonoBehaviour
         TryMove(hit.point);
     }
 
+    void OnDestroy()
+    {
+        GameOverHandler.ClientOnGameOver -= GameOverHandler_ClientOnGameOver;
+    }
+
     void TryMove(Vector3 point)
     {
          foreach(Unit unit in unitSelection.SelectedUnits)
@@ -38,10 +48,15 @@ public class UnitCommandGiver : MonoBehaviour
     }
 
     void TryTarget(Targetable target)
-    {
+    {               
         foreach (Unit unit in unitSelection.SelectedUnits)
         {
             unit.GetTargeter().CmdSetTarget(target.gameObject);
         }
+    }
+
+    void GameOverHandler_ClientOnGameOver(string winnerName)
+    {
+        enabled = false;
     }
 }
