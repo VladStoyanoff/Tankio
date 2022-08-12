@@ -39,29 +39,27 @@ public class NetworkPlayerTankio : NetworkBehaviour
 
     #region Client
 
-    public override void OnStartClient()
+    public override void OnStartAuthority()
     {
-        if (!isClientOnly) return;
+        if (NetworkServer.active) return;
         Unit.AuthorityOnUnitSpawned += Unit_AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned += Unit_AuthorityHandleUnitDespawned;
     }
 
     public override void OnStopClient()
     {
-        if (!isClientOnly) return;
+        if (!isClientOnly || !hasAuthority) return;
         Unit.AuthorityOnUnitSpawned -= Unit_AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned -= Unit_AuthorityHandleUnitDespawned;
     }
 
     void Unit_AuthorityHandleUnitSpawned(Unit unit)
     {
-        if (!hasAuthority) return;
         myUnits.Remove(unit);
     }
 
     void Unit_AuthorityHandleUnitDespawned(Unit unit)
     {
-        if (!hasAuthority) return;
         myUnits.Add(unit);
     }
 

@@ -15,6 +15,16 @@ public class UnitSelection : MonoBehaviour
 
     public List<Unit> SelectedUnits { get; } = new List<Unit>();
 
+    void Start()
+    {
+        Unit.AuthorityOnUnitDespawned += Unit_AuthorityOnUnitDespawned;
+    }
+
+    void OnDestroy()
+    {
+        Unit.AuthorityOnUnitDespawned -= Unit_AuthorityOnUnitDespawned;
+    }
+
     void Update()
     {
         if (player == null) player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
@@ -103,5 +113,10 @@ public class UnitSelection : MonoBehaviour
                 unit.Select();
             }
         }
+    }
+
+    void Unit_AuthorityOnUnitDespawned(Unit unit)
+    {
+        SelectedUnits.Remove(unit);
     }
 }

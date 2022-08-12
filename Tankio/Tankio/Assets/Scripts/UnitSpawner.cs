@@ -7,10 +7,27 @@ using Mirror;
 
 public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 {
+    [SerializeField] Health health;
     [SerializeField] GameObject unitPrefab;
     [SerializeField] Transform unitSpawnPoint;
 
     #region Server
+
+    public override void OnStartServer()
+    {
+        health.ServerOnDie += Health_ServerOnDie;
+    }
+
+    public override void OnStopServer()
+    {
+        health.ServerOnDie -= Health_ServerOnDie;
+    }
+
+    [Server]
+    void Health_ServerOnDie()
+    {
+        NetworkServer.Destroy(gameObject);
+    }
 
     [Command]
     void CmdSpawnUnit()
