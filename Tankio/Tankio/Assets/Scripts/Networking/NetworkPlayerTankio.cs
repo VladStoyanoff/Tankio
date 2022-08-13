@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,8 +13,20 @@ public class NetworkPlayerTankio : NetworkBehaviour
     List<Unit> myUnits = new List<Unit>();
     List<Building> myBuildings = new List<Building>();
 
+    [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
+    int resources = 500;
+
+    public event Action<int> ClientOnResourcesUpdated;
+
+    public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;
+
+    [Server]
+    public void SetResources(int newResources)
+    {
+        resources = newResources;
+    }
 
     public override void OnStartServer()
     {
@@ -101,7 +114,6 @@ public class NetworkPlayerTankio : NetworkBehaviour
         Unit.AuthorityOnUnitDespawned -= Unit_AuthorityHandleUnitDespawned;
         Building.AuthorityOnBuildingSpawned -= Building_AuthorityOnBuildingSpawned;
         Building.AuthorityOnBuildingDespawned -= Building_AuthorityOnBuildingDespawned;
-
     }
 
     void Unit_AuthorityHandleUnitSpawned(Unit unit)
@@ -122,6 +134,11 @@ public class NetworkPlayerTankio : NetworkBehaviour
     void Building_AuthorityOnBuildingDespawned(Building building)
     {
         myBuildings.Add(building);
+    }
+
+    void ClientHandleResourcesUpdated(int oldResources, int newResources)
+    {
+        ClientOnResourcesUpdated?.Invoke(newResources);
     }
 
     #endregion
