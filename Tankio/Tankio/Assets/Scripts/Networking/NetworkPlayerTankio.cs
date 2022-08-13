@@ -7,18 +7,28 @@ using TMPro;
 
 public class NetworkPlayerTankio : NetworkBehaviour
 {
+    [SerializeField] Building[] buildings = new Building[0];
+
     List<Unit> myUnits = new List<Unit>();
+    List<Building> myBuildings = new List<Building>();
+
+    public List<Unit> GetMyUnits() => myUnits;
+    public List<Building> GetMyBuildings() => myBuildings;
 
     public override void OnStartServer()
     {
         Unit.ServerOnUnitSpawned += Unit_ServerHandleUnitSpawned;
         Unit.ServerOnUnitDespawned += Unit_ServerHandleUnitDespawned;
+        Building.ServerOnBuildingSpawned += Building_ServerOnBuildingSpawned;
+        Building.ServerOnBuildingDespawned += Building_ServerOnBuildingDespawned;
     }
 
     public override void OnStopServer()
     {
         Unit.ServerOnUnitSpawned -= Unit_ServerHandleUnitSpawned;
         Unit.ServerOnUnitDespawned -= Unit_ServerHandleUnitDespawned;
+        Building.ServerOnBuildingSpawned -= Building_ServerOnBuildingSpawned;
+        Building.ServerOnBuildingDespawned -= Building_ServerOnBuildingDespawned;
     }
 
     #region Server
@@ -35,6 +45,42 @@ public class NetworkPlayerTankio : NetworkBehaviour
 
         myUnits.Remove(unit);
     }
+
+    void Building_ServerOnBuildingSpawned(Building building)
+    {
+        if (building.connectionToClient.connectionId != connectionToClient.connectionId) return;
+
+        myBuildings.Add(building);
+    }
+
+    void Building_ServerOnBuildingDespawned(Building building)
+    {
+        if (building.connectionToClient.connectionId != connectionToClient.connectionId) return;
+
+        myBuildings.Remove(building);
+    }
+
+    [Command]
+    public void CmdTryPlaceBuilding(int buildingId, Vector3 position)
+    {
+        Building buildingToPlace = null;
+
+        foreach(Building building in buildings)
+        {
+            if(building.GetId() == buildingId)
+            {
+                buildingToPlace = building;
+                break;
+            }
+        }
+
+        if (buildingToPlace == null) return;
+
+        GameObject buildingInstance = Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
+
+        NetworkServer.Spawn(buildingInstance, connectionToClient);
+    }
+
     #endregion
 
     #region Client
@@ -44,6 +90,8 @@ public class NetworkPlayerTankio : NetworkBehaviour
         if (NetworkServer.active) return;
         Unit.AuthorityOnUnitSpawned += Unit_AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned += Unit_AuthorityHandleUnitDespawned;
+        Building.AuthorityOnBuildingSpawned += Building_AuthorityOnBuildingSpawned;
+        Building.AuthorityOnBuildingDespawned += Building_AuthorityOnBuildingDespawned;
     }
 
     public override void OnStopClient()
@@ -51,6 +99,9 @@ public class NetworkPlayerTankio : NetworkBehaviour
         if (!isClientOnly || !hasAuthority) return;
         Unit.AuthorityOnUnitSpawned -= Unit_AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned -= Unit_AuthorityHandleUnitDespawned;
+        Building.AuthorityOnBuildingSpawned -= Building_AuthorityOnBuildingSpawned;
+        Building.AuthorityOnBuildingDespawned -= Building_AuthorityOnBuildingDespawned;
+
     }
 
     void Unit_AuthorityHandleUnitSpawned(Unit unit)
@@ -63,7 +114,17 @@ public class NetworkPlayerTankio : NetworkBehaviour
         myUnits.Add(unit);
     }
 
+    void Building_AuthorityOnBuildingSpawned(Building building)
+    {
+        myBuildings.Remove(building);
+    }
+
+    void Building_AuthorityOnBuildingDespawned(Building building)
+    {
+        myBuildings.Add(building);
+    }
+
     #endregion
-    public List<Unit> GetMyUnits() => myUnits;
+
 }
 
