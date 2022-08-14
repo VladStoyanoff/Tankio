@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5977451556490220281}
   - component: {fileID: 5977451556490220230}
-  - component: {fileID: 7636265258890327407}
   - component: {fileID: 6204729132632867918}
   - component: {fileID: 357175702960375700}
   - component: {fileID: 6541492143336835217}
   - component: {fileID: 1388516453474784128}
   - component: {fileID: 5623211324384181657}
+  - component: {fileID: 6893427102263764347}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -55,19 +55,6 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 5465d1785b84c1c4d9c233a586eaedae
   hasSpawned: 0
---- !u!65 &7636265258890327407
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5977451556490220231}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!208 &6204729132632867918
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -128,6 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  buildingPreview: {fileID: 0}
   icon: {fileID: 0}
   id: -1
   price: 100
@@ -146,6 +134,19 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   aimAtPoint: {fileID: 0}
+--- !u!65 &6893427102263764347
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5977451556490220231}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &7020044074683104276
 PrefabInstance:
   m_ObjectHideFlags: 0

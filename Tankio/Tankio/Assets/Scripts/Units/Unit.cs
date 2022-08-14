@@ -7,6 +7,7 @@ using Mirror;
 
 public class Unit : NetworkBehaviour
 {
+    [SerializeField] int resourceCost = 10;
     [SerializeField] UnitMovement unitMovement;
     [SerializeField] Targeter targeter;
     [SerializeField] UnityEvent onSelected;
@@ -70,4 +71,5 @@ public class Unit : NetworkBehaviour
 
     public UnitMovement GetUnitMovement() => unitMovement;
     public Targeter GetTargeter() => targeter;
+    public int GetResourceCost() => resourceCost;
 }

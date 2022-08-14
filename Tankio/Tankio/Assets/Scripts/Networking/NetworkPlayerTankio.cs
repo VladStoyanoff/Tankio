@@ -8,7 +8,9 @@ using TMPro;
 
 public class NetworkPlayerTankio : NetworkBehaviour
 {
+    [SerializeField] LayerMask buildingBlockLayer = new LayerMask();
     [SerializeField] Building[] buildings = new Building[0];
+    [SerializeField] float buildingRangeLimit = 5f;
 
     List<Unit> myUnits = new List<Unit>();
     List<Building> myBuildings = new List<Building>();
@@ -28,6 +30,23 @@ public class NetworkPlayerTankio : NetworkBehaviour
         resources = newResources;
     }
 
+    public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
+    {
+
+        if (Physics.CheckBox(position + buildingCollider.center, buildingCollider.size / 2, Quaternion.identity, buildingBlockLayer)) return false;
+
+        foreach (Building building in myBuildings)
+        {
+            if ((position - building.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    #region Server
+
     public override void OnStartServer()
     {
         Unit.ServerOnUnitSpawned += Unit_ServerHandleUnitSpawned;
@@ -44,7 +63,6 @@ public class NetworkPlayerTankio : NetworkBehaviour
         Building.ServerOnBuildingDespawned -= Building_ServerOnBuildingDespawned;
     }
 
-    #region Server
     void Unit_ServerHandleUnitSpawned(Unit unit)
     {
         if (unit.connectionToClient.connectionId != connectionToClient.connectionId) return;
@@ -89,9 +107,17 @@ public class NetworkPlayerTankio : NetworkBehaviour
 
         if (buildingToPlace == null) return;
 
-        GameObject buildingInstance = Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
+        if (resources < buildingToPlace.GetPrice()) return;
+
+        var buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
+
+        if (!CanPlaceBuilding(buildingCollider, position)) return;
+
+        var buildingInstance = Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
 
         NetworkServer.Spawn(buildingInstance, connectionToClient);
+
+        SetResources(resources - buildingToPlace.GetPrice());
     }
 
     #endregion

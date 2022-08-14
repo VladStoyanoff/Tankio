@@ -17,11 +17,13 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     NetworkPlayerTankio player;
     GameObject buildingPreviewInstance;
     Renderer buildingRendererInstance;
+    BoxCollider buildingCollider;
 
     void Start()
     {
         iconImage.overrideSprite = building.GetIcon();
         priceText.text = building.GetPrice().ToString();
+        buildingCollider = building.GetComponent<BoxCollider>();
     }
 
     void Update()
@@ -39,6 +41,8 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
+
+        if (player.GetResources() < building.GetPrice()) return;
 
         buildingPreviewInstance = Instantiate(building.GetBuildingPreview());
         buildingRendererInstance = buildingPreviewInstance.GetComponentInChildren<Renderer>();
@@ -72,5 +76,9 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         {
             buildingPreviewInstance.SetActive(true);
         }
+
+        var color = player.CanPlaceBuilding(buildingCollider, hit.point) ? Color.green : Color.red;
+
+        buildingRendererInstance.material.SetColor("_BaseColor", color);
     }
 }
