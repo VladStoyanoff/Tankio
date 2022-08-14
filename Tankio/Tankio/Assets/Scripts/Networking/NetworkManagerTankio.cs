@@ -12,7 +12,12 @@ public class NetworkManagerTankio : NetworkManager
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         base.OnServerAddPlayer(conn);
-        GameObject unitSpawnerInstance = Instantiate(unitSpawnerPrefab, conn.identity.transform.position, conn.identity.transform.rotation);
+        var player = conn.identity.GetComponent<NetworkPlayerTankio>();
+        player.SetTeamColor(new Color(
+            Random.Range(0f, 1f),
+            Random.Range(0f, 1f),
+            Random.Range(0f, 1f)));
+        var unitSpawnerInstance = Instantiate(unitSpawnerPrefab, conn.identity.transform.position, conn.identity.transform.rotation);
         NetworkServer.Spawn(unitSpawnerInstance, conn);
     }
 
@@ -20,7 +25,7 @@ public class NetworkManagerTankio : NetworkManager
     {
         if (SceneManager.GetActiveScene().name.StartsWith("Map_01"))
         {
-            GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
+            var gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
 
             NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
         }

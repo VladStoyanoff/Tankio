@@ -12,6 +12,7 @@ public class NetworkPlayerTankio : NetworkBehaviour
     [SerializeField] Building[] buildings = new Building[0];
     [SerializeField] float buildingRangeLimit = 5f;
 
+    Color teamColor = new Color();
     List<Unit> myUnits = new List<Unit>();
     List<Building> myBuildings = new List<Building>();
 
@@ -20,6 +21,7 @@ public class NetworkPlayerTankio : NetworkBehaviour
 
     public event Action<int> ClientOnResourcesUpdated;
 
+    public Color GetTeamColor() => teamColor;
     public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;
@@ -28,6 +30,11 @@ public class NetworkPlayerTankio : NetworkBehaviour
     public void SetResources(int newResources)
     {
         resources = newResources;
+    }
+
+    [Server] public void SetTeamColor(Color newTeamColor)
+    {
+        teamColor = newTeamColor;
     }
 
     public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
