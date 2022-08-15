@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] GameObject landingPagePanel;
 
-    // Update is called once per frame
-    void Update()
+    public void HostLobby()
     {
-        
+        landingPagePanel.SetActive(false);
+
+        NetworkManager.singleton.StartHost();
     }
 }

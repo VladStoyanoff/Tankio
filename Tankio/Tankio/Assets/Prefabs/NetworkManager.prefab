@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6641702982981787893}
   - component: {fileID: 6641702982981787899}
   - component: {fileID: 6641702982981787896}
-  - component: {fileID: 6641702982981787898}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -59,12 +58,15 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
-  - {fileID: 8316910874165869689, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
   - {fileID: 3964943699342011379, guid: d284ed0df0579304097c1ee83d72c20a, type: 3}
-  - {fileID: 1293096672235697285, guid: 79b8b129a39071c4a9d09694232d176c, type: 3}
   - {fileID: 3189050638983598582, guid: cddf3d01d60f57044b7c3d3fa8cf3c0d, type: 3}
-  - {fileID: 3964943699342011379, guid: 021af88184c8a1041825cf5a00c7f100, type: 3}
   - {fileID: 3964943699342011379, guid: 4c645a158a7d70646b0600a777032736, type: 3}
+  - {fileID: 3503706017232953545, guid: e186e910b1d2c2b48870ea6ad173c0ea, type: 3}
+  - {fileID: 1191808795400283144, guid: ad138b660646cbb47b2f747c3169aee7, type: 3}
+  - {fileID: 8148750253001582767, guid: 4b358ed7bb749964fac9845450c56e5d, type: 3}
+  - {fileID: 3503706017232953545, guid: ec26d593541dd2c41aae3eaae776f00a, type: 3}
+  - {fileID: 1191808795400283144, guid: fbd48933eabd4f342b19916822dd4594, type: 3}
+  - {fileID: 8148750253001582767, guid: f77de3a3017120e46b68fba26cbfce4a, type: 3}
   unitSpawnerPrefab: {fileID: 3964943699342011379, guid: d284ed0df0579304097c1ee83d72c20a, type: 3}
   gameOverHandlerPrefab: {fileID: 3189050638983598583, guid: cddf3d01d60f57044b7c3d3fa8cf3c0d, type: 3}
 --- !u!114 &6641702982981787896
@@ -96,17 +98,3 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &6641702982981787898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6641702982981787892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0
