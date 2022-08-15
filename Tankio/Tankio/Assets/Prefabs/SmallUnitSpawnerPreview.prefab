@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 280485290777961779}
   m_Layer: 0
-  m_Name: UnitSpawnerPreview
+  m_Name: SmallUnitSpawnerPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

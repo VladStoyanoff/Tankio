@@ -60,7 +60,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3964943699342011341}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2238532871444574756
 MeshFilter:
@@ -128,7 +128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1375532919158303199, guid: 2ed7423b9fab524498beda8ce391675f, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1375532919158303199, guid: 2ed7423b9fab524498beda8ce391675f, type: 3}
       propertyPath: m_AnchorMax.x
@@ -247,73 +247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa2d590c474413d9fc183551385ed85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &5936509434776400616
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 3964943699342011341}
-    m_Modifications:
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 280485290777961779, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8375861671144616207, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-      propertyPath: m_Name
-      value: UnitSpawnerPreview
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 029cdc6375674be4093ee749453b6077, type: 3}
---- !u!4 &7856252423119704737 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4568255397718138953, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-  m_PrefabInstance: {fileID: 5936509434776400616}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &6899106299850572524 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 998738366383714308, guid: 029cdc6375674be4093ee749453b6077, type: 3}
-  m_PrefabInstance: {fileID: 5936509434776400616}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7346043673760545076
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -348,7 +281,7 @@ PrefabInstance:
     - target: {fileID: 5623211324384181657, guid: 5465d1785b84c1c4d9c233a586eaedae, type: 3}
       propertyPath: aimAtPoint
       value: 
-      objectReference: {fileID: 7856252423119704737}
+      objectReference: {fileID: 0}
     - target: {fileID: 5977451556490220230, guid: 5465d1785b84c1c4d9c233a586eaedae, type: 3}
       propertyPath: sceneId
       value: 0
@@ -447,7 +380,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   colorRenderers:
-  - {fileID: 6899106299850572524}
+  - {fileID: 0}
   - {fileID: 5694885606618651969}
 --- !u!114 &4285282511172626555
 MonoBehaviour:

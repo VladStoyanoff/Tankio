@@ -8,6 +8,7 @@ using TMPro;
 
 public class NetworkPlayerTankio : NetworkBehaviour
 {
+    [SerializeField] Transform cameraTransform;
     [SerializeField] LayerMask buildingBlockLayer = new LayerMask();
     [SerializeField] Building[] buildings = new Building[0];
     [SerializeField] float buildingRangeLimit = 5f;
@@ -21,6 +22,7 @@ public class NetworkPlayerTankio : NetworkBehaviour
 
     public event Action<int> ClientOnResourcesUpdated;
 
+    public Transform GetCameraTransform() => cameraTransform;
     public Color GetTeamColor() => teamColor;
     public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
