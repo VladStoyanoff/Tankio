@@ -206,7 +206,6 @@ GameObject:
   - component: {fileID: 4574751047557316537}
   - component: {fileID: -45474474097643295}
   - component: {fileID: 376227999010532296}
-  - component: {fileID: 7361543543407909237}
   - component: {fileID: 826574030822496214}
   - component: {fileID: 5544554771191892640}
   - component: {fileID: 4844834239017712590}
@@ -327,26 +326,6 @@ MonoBehaviour:
   visible: 0
   m_AssetId: f6d8dfefe360d3b41bcf9cd8e567751d
   hasSpawned: 0
---- !u!114 &7361543543407909237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8316910874165869689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5d404df355f5b04f9a109347fa32b78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  cameraTransform: {fileID: 0}
-  buildingBlockLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  buildings: []
-  buildingRangeLimit: 5
 --- !u!114 &826574030822496214
 MonoBehaviour:
   m_ObjectHideFlags: 0
