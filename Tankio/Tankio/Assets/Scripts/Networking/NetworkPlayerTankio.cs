@@ -14,6 +14,9 @@ public class NetworkPlayerTankio : NetworkBehaviour
     [SerializeField] float buildingRangeLimit = 5f;
 
     public static event Action<bool> AuthorityOnPartyOwnerStateUpdated;
+    public static event Action ClientOnInfoUpdated;
+
+    public event Action<int> ClientOnResourcesUpdated;
 
     Color teamColor = new Color();
     List<Unit> myUnits = new List<Unit>();
@@ -23,15 +26,22 @@ public class NetworkPlayerTankio : NetworkBehaviour
     int resources = 500;
     [SyncVar(hook = nameof(AuthorityHandlePartyOwnerStateUpdated))]
     bool isPartyOwner;
+    [SyncVar(hook = nameof(ClientHandleDisplayNameUpdated))]
+    string displayName;
 
-    public event Action<int> ClientOnResourcesUpdated;
-
+    public string GetDisplayName() => displayName;
     public bool GetIsPartyOwnerBool() => isPartyOwner;
     public Transform GetCameraTransform() => cameraTransform;
     public Color GetTeamColor() => teamColor;
     public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;
+
+    [Server]
+    public void SetDisplayName(string displayName)
+    {
+        this.displayName = displayName;
+    }
 
     [Server]
     public void SetPartyOwner(bool state)
@@ -45,6 +55,12 @@ public class NetworkPlayerTankio : NetworkBehaviour
         resources = newResources;
     }
 
+    [Server]
+    public void SetTeamColor(Color newTeamColor)
+    {
+        teamColor = newTeamColor;
+    }
+
     [Command]
     public void CmdStartGame()
     {
@@ -53,10 +69,7 @@ public class NetworkPlayerTankio : NetworkBehaviour
         ((NetworkManagerTankio)NetworkManager.singleton).StartGame();
     }
 
-    [Server] public void SetTeamColor(Color newTeamColor)
-    {
-        teamColor = newTeamColor;
-    }
+
 
     public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
     {
@@ -173,6 +186,8 @@ public class NetworkPlayerTankio : NetworkBehaviour
 
     public override void OnStopClient()
     {
+        ClientOnInfoUpdated?.Invoke();
+
         if (!isClientOnly) return;
 
         ((NetworkManagerTankio)NetworkManager.singleton).Players.Remove(this);
@@ -183,6 +198,11 @@ public class NetworkPlayerTankio : NetworkBehaviour
         Unit.AuthorityOnUnitDespawned -= Unit_AuthorityHandleUnitDespawned;
         Building.AuthorityOnBuildingSpawned -= Building_AuthorityOnBuildingSpawned;
         Building.AuthorityOnBuildingDespawned -= Building_AuthorityOnBuildingDespawned;
+    }
+
+    void ClientHandleDisplayNameUpdated(string oldDisplayName, string newDisplayName)
+    {
+        ClientOnInfoUpdated?.Invoke();
     }
 
     void Unit_AuthorityHandleUnitSpawned(Unit unit)

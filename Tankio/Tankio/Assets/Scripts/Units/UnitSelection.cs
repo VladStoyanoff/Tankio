@@ -17,6 +17,7 @@ public class UnitSelection : MonoBehaviour
 
     void Start()
     {
+        player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
         Unit.AuthorityOnUnitDespawned += Unit_AuthorityOnUnitDespawned;
         GameOverHandler.ClientOnGameOver += GameOverHandler_ClientOnGameOver;
     }
@@ -28,8 +29,6 @@ public class UnitSelection : MonoBehaviour
 
     void Update()
     {
-        if (player == null) player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
-
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             StartSelectionArea();

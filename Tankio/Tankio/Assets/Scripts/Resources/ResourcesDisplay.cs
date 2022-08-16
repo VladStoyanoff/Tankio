@@ -10,17 +10,11 @@ public class ResourcesDisplay : MonoBehaviour
 
     NetworkPlayerTankio player;
 
-    void Update()
+    void Start()
     {
-        if (player == null)
-        {
-            player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
-            if(player != null)
-            {
-                Player_ClientOnResourcesUpdated(player.GetResources());
-                player.ClientOnResourcesUpdated += Player_ClientOnResourcesUpdated;
-            }
-        } 
+        player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
+        Player_ClientOnResourcesUpdated(player.GetResources());
+        player.ClientOnResourcesUpdated += Player_ClientOnResourcesUpdated;
     }
 
     void OnDestroy()
