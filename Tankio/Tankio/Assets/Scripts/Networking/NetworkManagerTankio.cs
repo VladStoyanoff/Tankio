@@ -7,11 +7,84 @@ using Mirror;
 
 public class NetworkManagerTankio : NetworkManager
 {
-    [SerializeField] GameObject unitSpawnerPrefab;
+    [SerializeField] GameObject unitBasePrefab;
     [SerializeField] GameOverHandler gameOverHandlerPrefab;
 
     public static event Action ClientOnConnected;
     public static event Action ClientOnDisconnected;
+
+    bool isGameInProgress;
+
+    public List<NetworkPlayerTankio> Players { get; } = new List<NetworkPlayerTankio>();
+
+    #region Server
+
+    public override void OnServerConnect(NetworkConnectionToClient conn)
+    {
+        if (!isGameInProgress) return;
+
+        conn.Disconnect();
+    }
+
+    public override void OnServerDisconnect(NetworkConnectionToClient conn)
+    {
+        var player = conn.identity.GetComponent<NetworkPlayerTankio>();
+
+        Players.Remove(player);
+    }
+
+    public override void OnStopServer()
+    {
+        Players.Clear();
+
+        isGameInProgress = false;
+    }
+
+    public void StartGame()
+    {
+        if (Players.Count < 2) return;
+
+        isGameInProgress = true;
+
+        ServerChangeScene("Map_01");
+    }
+
+    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    {
+        base.OnServerAddPlayer(conn);
+
+        var player = conn.identity.GetComponent<NetworkPlayerTankio>();
+
+        Players.Add(player);
+
+        player.SetTeamColor(new Color(
+            UnityEngine.Random.Range(0f, 1f),
+            UnityEngine.Random.Range(0f, 1f),
+            UnityEngine.Random.Range(0f, 1f)));
+
+        player.SetPartyOwner(Players.Count == 1);
+    }
+
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        if (SceneManager.GetActiveScene().name.StartsWith("Map_01"))
+        {
+            var gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
+
+            NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
+
+            foreach(NetworkPlayerTankio player in Players)
+            {
+                var baseInstance = Instantiate(unitBasePrefab, GetStartPosition().position, Quaternion.identity);
+
+                NetworkServer.Spawn(baseInstance, player.connectionToClient);
+            }
+        }
+    }
+
+    #endregion
+
+    #region Client
 
     public override void OnClientConnect()
     {
@@ -25,26 +98,10 @@ public class NetworkManagerTankio : NetworkManager
         ClientOnDisconnected?.Invoke();
     }
 
-    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    public override void OnStopClient()
     {
-        base.OnServerAddPlayer(conn);
-        var player = conn.identity.GetComponent<NetworkPlayerTankio>();
-        player.SetTeamColor(new Color(
-            UnityEngine.Random.Range(0f, 1f),
-            UnityEngine.Random.Range(0f, 1f),
-            UnityEngine.Random.Range(0f, 1f)));
-
-        //var unitSpawnerInstance = Instantiate(unitSpawnerPrefab, conn.identity.transform.position, conn.identity.transform.rotation);
-        //NetworkServer.Spawn(unitSpawnerInstance, conn);
+        Players.Clear();
     }
 
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        if (SceneManager.GetActiveScene().name.StartsWith("Map_01"))
-        {
-            var gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
-
-            NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
-        }
-    }
+    #endregion
 }

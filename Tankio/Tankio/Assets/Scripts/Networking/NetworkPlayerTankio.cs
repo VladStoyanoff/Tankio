@@ -13,15 +13,20 @@ public class NetworkPlayerTankio : NetworkBehaviour
     [SerializeField] Building[] buildings = new Building[0];
     [SerializeField] float buildingRangeLimit = 5f;
 
+    public static event Action<bool> AuthorityOnPartyOwnerStateUpdated;
+
     Color teamColor = new Color();
     List<Unit> myUnits = new List<Unit>();
     List<Building> myBuildings = new List<Building>();
 
     [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
     int resources = 500;
+    [SyncVar(hook = nameof(AuthorityHandlePartyOwnerStateUpdated))]
+    bool isPartyOwner;
 
     public event Action<int> ClientOnResourcesUpdated;
 
+    public bool GetIsPartyOwnerBool() => isPartyOwner;
     public Transform GetCameraTransform() => cameraTransform;
     public Color GetTeamColor() => teamColor;
     public int GetResources() => resources;
@@ -29,9 +34,23 @@ public class NetworkPlayerTankio : NetworkBehaviour
     public List<Building> GetMyBuildings() => myBuildings;
 
     [Server]
+    public void SetPartyOwner(bool state)
+    {
+        isPartyOwner = state;
+    }
+
+    [Server]
     public void SetResources(int newResources)
     {
         resources = newResources;
+    }
+
+    [Command]
+    public void CmdStartGame()
+    {
+        if (!isPartyOwner) return;
+
+        ((NetworkManagerTankio)NetworkManager.singleton).StartGame();
     }
 
     [Server] public void SetTeamColor(Color newTeamColor)
@@ -61,6 +80,8 @@ public class NetworkPlayerTankio : NetworkBehaviour
         Unit.ServerOnUnitDespawned += Unit_ServerHandleUnitDespawned;
         Building.ServerOnBuildingSpawned += Building_ServerOnBuildingSpawned;
         Building.ServerOnBuildingDespawned += Building_ServerOnBuildingDespawned;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     public override void OnStopServer()
@@ -141,9 +162,23 @@ public class NetworkPlayerTankio : NetworkBehaviour
         Building.AuthorityOnBuildingDespawned += Building_AuthorityOnBuildingDespawned;
     }
 
+    public override void OnStartClient()
+    {
+        if (NetworkServer.active) return;
+
+        DontDestroyOnLoad(gameObject);
+
+        ((NetworkManagerTankio)NetworkManager.singleton).Players.Add(this);
+    }
+
     public override void OnStopClient()
     {
-        if (!isClientOnly || !hasAuthority) return;
+        if (!isClientOnly) return;
+
+        ((NetworkManagerTankio)NetworkManager.singleton).Players.Remove(this);
+
+        if (!hasAuthority) return;
+
         Unit.AuthorityOnUnitSpawned -= Unit_AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned -= Unit_AuthorityHandleUnitDespawned;
         Building.AuthorityOnBuildingSpawned -= Building_AuthorityOnBuildingSpawned;
@@ -153,6 +188,13 @@ public class NetworkPlayerTankio : NetworkBehaviour
     void Unit_AuthorityHandleUnitSpawned(Unit unit)
     {
         myUnits.Remove(unit);
+    }
+
+    void AuthorityHandlePartyOwnerStateUpdated(bool oldState, bool newState)
+    {
+        if (!hasAuthority) return;
+
+        AuthorityOnPartyOwnerStateUpdated?.Invoke(newState);
     }
 
     void Unit_AuthorityHandleUnitDespawned(Unit unit)
