@@ -131,7 +131,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2616018263603446836, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4574751047557316537, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
       propertyPath: m_Speed
@@ -164,6 +164,30 @@ PrefabInstance:
     - target: {fileID: 5349422099170978756, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.435
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544554771191892640, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
+      propertyPath: onSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7474223511547435140}
+    - target: {fileID: 5544554771191892640, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
+      propertyPath: onDeselected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7474223511547435140}
+    - target: {fileID: 5544554771191892640, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
+      propertyPath: onSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544554771191892640, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
+      propertyPath: onDeselected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544554771191892640, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
+      propertyPath: onSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Renderer, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544554771191892640, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
+      propertyPath: onDeselected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Renderer, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5883788275229441969, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
       propertyPath: m_IsActive
@@ -267,5 +291,10 @@ PrefabInstance:
 --- !u!4 &3503706017232953542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8316910874165869686, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
+  m_PrefabInstance: {fileID: 4896591948723051696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &7474223511547435140 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 2616018263603446836, guid: f6d8dfefe360d3b41bcf9cd8e567751d, type: 3}
   m_PrefabInstance: {fileID: 4896591948723051696}
   m_PrefabAsset: {fileID: 0}
