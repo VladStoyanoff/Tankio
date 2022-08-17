@@ -73,17 +73,19 @@ public class NetworkPlayerTankio : NetworkBehaviour
 
     public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
     {
-        if (Physics.CheckBox(position + buildingCollider.center, buildingCollider.size / 2, Quaternion.identity, buildingBlockLayer)) return false;
+        //if (Physics.CheckBox(position + buildingCollider.center, buildingCollider.size / 2, Quaternion.identity, buildingBlockLayer)) return false;
 
         foreach (Building building in myBuildings)
         {
-            if ((position - building.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
+            if (true)
             {
                 return true;
             }
         }
         return false;
     }
+
+    //(position - building.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit
 
     #region Server
 

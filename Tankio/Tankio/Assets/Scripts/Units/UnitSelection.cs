@@ -21,7 +21,6 @@ public class UnitSelection : MonoBehaviour
     void Start()
     {
         buildingButton = FindObjectOfType<BuildingButton>();
-        Debug.Log(buildingButton);
         player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
         Unit.AuthorityOnUnitDespawned += Unit_AuthorityOnUnitDespawned;
         GameOverHandler.ClientOnGameOver += GameOverHandler_ClientOnGameOver;
