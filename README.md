@@ -4,6 +4,6 @@ Tankio is an RTS mini-game where you must plan your actions wisely in order to g
 
 View a demo video of the game by clicking [here](https://www.youtube.com/watch?v=_PQJewjYdvs)
 
-Website: https://vladstoyanoff.wixsite.com/vlad-stoyanoff
+[My Website](https://vladstoyanoff.wixsite.com/vlad-stoyanoff)
 
-Link to the game on Itch.io: https://vladstoyanoff.itch.io/tankio
+[The game on Itch.io](https://vladstoyanoff.itch.io/tankio)
