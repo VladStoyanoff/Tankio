@@ -4,12 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class UnitSelection : MonoBehaviour
 {
     [SerializeField] RectTransform unitSelectionArea;
     [SerializeField] LayerMask layerMask;
+    bool isPlacingABuilding;
 
+    BuildingButton buildingButton;
     Vector2 startPosition;
     NetworkPlayerTankio player;
 
@@ -17,6 +20,8 @@ public class UnitSelection : MonoBehaviour
 
     void Start()
     {
+        buildingButton = FindObjectOfType<BuildingButton>();
+        Debug.Log(buildingButton);
         player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
         Unit.AuthorityOnUnitDespawned += Unit_AuthorityOnUnitDespawned;
         GameOverHandler.ClientOnGameOver += GameOverHandler_ClientOnGameOver;
@@ -29,6 +34,8 @@ public class UnitSelection : MonoBehaviour
 
     void Update()
     {
+        if (isPlacingABuilding) return;
+
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             StartSelectionArea();
@@ -123,5 +130,15 @@ public class UnitSelection : MonoBehaviour
     void GameOverHandler_ClientOnGameOver(string winnerName)
     {
         enabled = false;
+    }
+
+    public void ActivateBoolIsPlacingABuilding()
+    {
+        isPlacingABuilding = true;
+    }
+
+    public void DisactivateBoolIsPlacingABuilding()
+    {
+        isPlacingABuilding = false;
     }
 }

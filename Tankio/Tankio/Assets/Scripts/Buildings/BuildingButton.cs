@@ -14,6 +14,7 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     [SerializeField] TMP_Text priceText;
     [SerializeField] LayerMask floorMask = new LayerMask();
 
+    UnitSelection unitSelection;
     NetworkPlayerTankio player;
     GameObject buildingPreviewInstance;
     Renderer buildingRendererInstance;
@@ -21,6 +22,7 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     void Start()
     {
+        unitSelection = FindObjectOfType<UnitSelection>();
         iconImage.overrideSprite = building.GetIcon();
         priceText.text = building.GetPrice().ToString();
         player = NetworkClient.connection.identity.GetComponent<NetworkPlayerTankio>();
@@ -40,6 +42,8 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
         if (player.GetResources() < building.GetPrice()) return;
 
+        unitSelection.ActivateBoolIsPlacingABuilding();
+
         buildingPreviewInstance = Instantiate(building.GetBuildingPreview());
         buildingRendererInstance = buildingPreviewInstance.GetComponentInChildren<Renderer>();
 
@@ -58,6 +62,8 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         }
 
         Destroy(buildingPreviewInstance);
+
+        unitSelection.DisactivateBoolIsPlacingABuilding();
     }
 
     void UpdateBuildingPreview()
